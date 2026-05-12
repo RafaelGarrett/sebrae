@@ -14,13 +14,15 @@
     ```
     http://localhost:8000/
     ```
+    ```
+    docker compose up -d --build
+    ```
     Executar as migration
     ```
+    sudo docker exec -it sebrae-app-1 bash
     php artisan migrate
-    ```
-    ```
+    nvm install 20
+    nvm use 20
+    npm run build
     npm run dev
-    ```
-    ```
-    docker compose up
     ```
