@@ -1,0 +1,50 @@
+networks:
+  sebrae-network:
+    driver: bridge
+    
+services:
+  php-fpm:
+    build:
+      context: ../docker/php-fpm
+      dockerfile: Dockerfile
+    container_name: php-fpm
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - sebrae-network
+
+  nginx:
+    build:
+      context: ../docker/nginx
+      dockerfile: Dockerfile
+    container_name: nginx
+    restart: unless-stopped
+    depends_on:
+      - php-fpm
+    networks:
+      - sebrae-network
+    ports:
+      - "8000:80"
+      - "5173:5173"
+    volumes:
+      - ./:/var/www/html
+
+  mysql-app:
+    build:
+      context: ../docker/mysql
+      dockerfile: Dockerfile
+    container_name: mysql-app
+    restart: unless-stopped
+    networks:
+      - sebrae-network
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 0?Tpax13
+      MYSQL_DATABASE: sebrae
+      MYSQL_USER: garre
+      MYSQL_PASSWORD: 0?Tpax13
+    volumes:
+      - ../docker/dbdata:/var/lib/mysql
